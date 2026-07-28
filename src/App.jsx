@@ -46,6 +46,18 @@ const Portfolio = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const resumePdfUrl = '/resume/Achut%20Kumar%20Gouda.pdf';
+
+  const handleResumeDownload = (e) => {
+    if (e) e.preventDefault();
+    const link = document.createElement('a');
+    link.href = resumePdfUrl;
+    link.download = 'Achut-Kumar-Gouda-Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const projects = [
     {
       id: 1,
@@ -124,7 +136,7 @@ const Portfolio = () => {
 
         <div className="hidden md:flex items-center gap-4">
           <button
-            onClick={() => setShowResumeModal(true)}
+            onClick={handleResumeDownload}
             className="border border-[#CCFF00]/40 text-[#CCFF00] px-5 py-2 text-xs font-mono font-bold uppercase tracking-widest hover:bg-[#CCFF00] hover:text-black transition-all duration-300 flex items-center gap-2"
           >
             <FileText className="w-4 h-4" /> Resume
@@ -160,10 +172,10 @@ const Portfolio = () => {
 
           <div className="flex flex-col gap-4 pt-6 border-t border-[#222]">
             <button
-              onClick={() => { setMobileMenuOpen(false); setShowResumeModal(true); }}
+              onClick={(e) => { setMobileMenuOpen(false); handleResumeDownload(e); }}
               className="w-full border border-[#CCFF00] text-[#CCFF00] py-3 text-center font-mono font-bold uppercase text-xs flex items-center justify-center gap-2"
             >
-              <FileText className="w-4 h-4" /> View Resume
+              <FileText className="w-4 h-4" /> Download Resume
             </button>
             <a
               onClick={() => setMobileMenuOpen(false)}
@@ -227,7 +239,7 @@ const Portfolio = () => {
                   Contact Me <Mail className="w-4 h-4" />
                 </a>
                 <button
-                  onClick={() => setShowResumeModal(true)}
+                  onClick={handleResumeDownload}
                   className="border border-[#262626] bg-[#161616] hover:bg-[#222] text-[#888] hover:text-white px-6 py-4 font-mono uppercase tracking-widest text-xs transition-colors flex items-center gap-2"
                 >
                   <Download className="w-4 h-4 text-[#CCFF00]" /> Resume
@@ -363,10 +375,10 @@ const Portfolio = () => {
 
               <div className="flex flex-wrap gap-4">
                 <button
-                  onClick={() => setShowResumeModal(true)}
+                  onClick={handleResumeDownload}
                   className="inline-flex items-center gap-3 bg-[#CCFF00] text-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:translate-x-1 transition-transform"
                 >
-                  <FileText className="w-4 h-4" /> View Full Skillset & Resume
+                  <FileText className="w-4 h-4" /> Download Resume
                 </button>
                 <a
                   href="#contact"
@@ -745,10 +757,10 @@ const Portfolio = () => {
             <div className="mt-8 pt-4 border-t border-[#262626] flex justify-between items-center">
               <span className="text-[10px] font-mono text-[#666]">Achuta Kumar Gouda Technical Resume</span>
               <button
-                onClick={() => window.print()}
+                onClick={handleResumeDownload}
                 className="bg-[#CCFF00] text-black px-4 py-2 font-mono text-xs font-bold uppercase flex items-center gap-2"
               >
-                <Download className="w-4 h-4" /> Print / Save PDF
+                <Download className="w-4 h-4" /> Download PDF
               </button>
             </div>
           </div>
