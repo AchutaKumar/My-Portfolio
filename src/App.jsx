@@ -60,59 +60,16 @@ const Portfolio = () => {
     },
     {
       id: 2,
-      title: 'FULL STACK REACT & DJANGO WEB APPLICATION',
-      category: 'Full Stack',
-      year: '2026',
-      description: 'End-to-end full stack web application integrating a dynamic React.js frontend with Django REST Framework API, MongoDB/MySQL storage, and CORS handling.',
-      tech: ['React.js', 'Python', 'Django', 'JSON', 'HTML5/CSS3', 'Render'],
-      image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1200&q=80',
-      demoUrl: '#',
-      githubUrl: '#'
-    },
-    {
-      id: 3,
-      title: 'RESPONSIVE DEVELOPER PORTFOLIO & UI SYSTEM',
-      category: 'Frontend',
-      year: '2026',
-      description: 'High-performance interactive personal web portal featuring responsive UI design, component architecture, CSS3 styling, and GitHub deployment.',
-      tech: ['React.js', 'JavaScript', 'HTML5', 'CSS3', 'Git', 'GitHub'],
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
-      demoUrl: '#',
-      githubUrl: '#'
-    },
-    {
-      id: 4,
-      title: 'DJANGO MVT ARCHITECTURE & MYSQL MANAGER',
-      category: 'Full Stack',
-      year: '2025',
-      description: 'Relational data management application leveraging Django MVT pattern, MySQL database schemas, complex SQL queries, and admin control panels.',
-      tech: ['Python', 'Django', 'MVT', 'SQL', 'MySQL', 'PyCharm'],
-      image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80',
-      demoUrl: '#',
-      githubUrl: '#'
-    },
-    {
-      id: 5,
-      title: 'RESTFUL API INTEGRATION & NETWORK INSPECTOR',
+      title: 'Emmployee Management System',
       category: 'API & Backend',
       year: '2026',
-      description: 'API inspection and networking utility dashboard evaluating HTTP/HTTPS requests, JSON payloads, CORS policies, and TCP/IP response headers.',
-      tech: ['Python', 'RESTful API', 'JSON', 'HTTP/HTTPS', 'Postman'],
-      image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
-      demoUrl: '#',
-      githubUrl: '#'
+      description: 'End-to-end full stack web application integrating a dynamic Django Template Language frontend with Django REST Framework API, MySQL storage implementing CRUD operations.',
+      tech: ['Python', 'Django', 'JSON', 'HTML5/CSS3','DTL', 'Render'],
+      image: 'img/employee-m.png',
+      demoUrl: 'https://employee-management-system-3gkr.onrender.com/',
+      githubUrl: 'https://github.com/AchutaKumar/Employee-Management-System'
     },
-    {
-      id: 6,
-      title: 'LINUX DEPLOYMENT & DEVOPS PIPELINE ON RENDER',
-      category: 'API & Backend',
-      year: '2025',
-      description: 'CI/CD deployment workflow hosting Django & React apps on Render Linux containers, configured with pip, npm, and Git branching strategies.',
-      tech: ['Linux', 'Render', 'Git', 'pip', 'npm', 'Agile'],
-      image: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=1200&q=80',
-      demoUrl: '#',
-      githubUrl: '#'
-    }
+    
   ];
 
   const filteredProjects = activeCategory === 'All'
