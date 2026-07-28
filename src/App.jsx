@@ -46,16 +46,28 @@ const Portfolio = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const resumePdfUrl = '/resume/Achut%20Kumar%20Gouda.pdf';
+  const resumePdfUrl = `${import.meta.env.BASE_URL}resume/Achut%20Kumar%20Gouda.pdf`;
 
-  const handleResumeDownload = (e) => {
+  const handleResumeDownload = async (e) => {
     if (e) e.preventDefault();
-    const link = document.createElement('a');
-    link.href = resumePdfUrl;
-    link.download = 'Achut-Kumar-Gouda-Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    try {
+      const response = await fetch(resumePdfUrl);
+      if (!response.ok) throw new Error('Unable to download resume');
+
+      const blob = await response.blob();
+      const objectUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = 'Achut-Kumar-Gouda-Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error('Resume download failed:', error);
+      window.open(resumePdfUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const projects = [
@@ -76,12 +88,23 @@ const Portfolio = () => {
       category: 'API & Backend',
       year: '2026',
       description: 'End-to-end full stack web application integrating a dynamic Django Template Language frontend with Django REST Framework API, MySQL storage implementing CRUD operations.',
-      tech: ['Python', 'Django', 'JSON', 'HTML5/CSS3','DTL', 'Render'],
+      tech: ['Python', 'Django', 'Django Rest Framework', 'JWT Auth', 'HTML5/CSS3', 'DTL', 'Render'],
       image: 'img/employee-m.png',
       demoUrl: 'https://employee-management-system-3gkr.onrender.com/',
       githubUrl: 'https://github.com/AchutaKumar/Employee-Management-System'
     },
-    
+    {
+      id: 3,
+      title: 'Blog Application',
+      category: 'Full Stack',
+      year: '2026',
+      description: 'Full-stack blogging platform built with Django and DTL, featuring complete CRUD capabilities for article management, dynamic user authentication, category filtering, and rich text rendering.',
+      tech: ['Python', 'Django', 'JWT', 'Django Rest Framework', 'HTML5/CSS3', 'DTL', 'Render'],
+      image: 'img/blog.png',
+      demoUrl: '#',
+      githubUrl: 'https://github.com/AchutaKumar/Blog-Application'
+    },
+
   ];
 
   const filteredProjects = activeCategory === 'All'
@@ -136,8 +159,8 @@ const Portfolio = () => {
 
         <div className="hidden md:flex items-center gap-4">
           <button
-            onClick={handleResumeDownload}
-            className="border border-[#CCFF00]/40 text-[#CCFF00] px-5 py-2 text-xs font-mono font-bold uppercase tracking-widest hover:bg-[#CCFF00] hover:text-black transition-all duration-300 flex items-center gap-2"
+            onClick={() => setShowResumeModal(true)}
+            className="border border-[#CCFF00]/40 text-[#CCFF00] px-5 py-2 text-xs font-mono font-bold uppercase tracking-widest hover:bg-[#ccff00] hover:text-black transition-all duration-300 flex items-center gap-2"
           >
             <FileText className="w-4 h-4" /> Resume
           </button>
@@ -172,10 +195,10 @@ const Portfolio = () => {
 
           <div className="flex flex-col gap-4 pt-6 border-t border-[#222]">
             <button
-              onClick={(e) => { setMobileMenuOpen(false); handleResumeDownload(e); }}
+              onClick={() => { setMobileMenuOpen(false); setShowResumeModal(true); }}
               className="w-full border border-[#CCFF00] text-[#CCFF00] py-3 text-center font-mono font-bold uppercase text-xs flex items-center justify-center gap-2"
             >
-              <FileText className="w-4 h-4" /> Download Resume
+              <FileText className="w-4 h-4" /> View Resume
             </button>
             <a
               onClick={() => setMobileMenuOpen(false)}
@@ -199,7 +222,7 @@ const Portfolio = () => {
               Available for Opportunities
             </span>
             <span className="inline-flex items-center gap-1 text-xs font-mono text-[#888] px-3 py-1 bg-[#1A1A1A] border border-[#262626]">
-              <MapPin className="w-3 h-3 text-[#CCFF00]" /> Ameerpet, Hyderabad, India
+              <MapPin className="w-3 h-3 text-[#CCFF00]" /> Hyderabad, India
             </span>
           </div>
 
@@ -207,7 +230,7 @@ const Portfolio = () => {
             <div className="lg:col-span-8">
               <h1 className="text-5xl sm:text-7xl lg:text-[90px] uppercase tracking-tighter mb-6 font-bold leading-none">
                 ACHUTA KUMAR <br />
-                <span className="border-text italic">GOUDA</span>
+                <span className="text-[#CCFF00] italic">GOUDA</span>
               </h1>
 
               <div className="max-w-2xl mb-8">
@@ -239,7 +262,7 @@ const Portfolio = () => {
                   Contact Me <Mail className="w-4 h-4" />
                 </a>
                 <button
-                  onClick={handleResumeDownload}
+                  onClick={() => setShowResumeModal(true)}
                   className="border border-[#262626] bg-[#161616] hover:bg-[#222] text-[#888] hover:text-white px-6 py-4 font-mono uppercase tracking-widest text-xs transition-colors flex items-center gap-2"
                 >
                   <Download className="w-4 h-4 text-[#CCFF00]" /> Resume
@@ -249,14 +272,13 @@ const Portfolio = () => {
 
             {/* Profile Card / Avatar */}
             <div className="lg:col-span-4 flex justify-center lg:justify-end">
-              <div className="relative group max-w-xs sm:max-w-sm w-full">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#CCFF00] to-emerald-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                <div className="relative bg-[#1A1A1A] border border-[#2a2a2a] p-3 rounded-lg overflow-hidden">
-                  <div className="aspect-[4/5] overflow-hidden rounded relative">
+              <div className="max-w-xs sm:max-w-sm w-full">
+                <div className="bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#262626] hover:border-[#3a3a3a] transition-all duration-300 hover:scale-[1.02]">
+                  <div className="aspect-[4/5] overflow-hidden relative">
                     <img
                       src={achutaPic}
                       alt="Achuta Kumar Gouda"
-                      className="w-full h-full object-cover grayscale contrast-110 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 p-5 flex flex-col justify-end">
                       <span className="text-[#CCFF00] font-mono text-[10px] uppercase tracking-widest">DEVELOPER PROFILE</span>
@@ -319,77 +341,7 @@ const Portfolio = () => {
         </div>
 
         {/* About Section */}
-        <section id="about" className="px-6 md:px-16 py-24 bg-[#111111] border-b border-[#1A1A1A]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5">
-              <div className="relative">
-                <div className="aspect-[4/5] overflow-hidden border border-[#262626] rounded-lg">
-                  <img
-                    src={achutaPic}
-                    alt="Achuta Kumar Gouda"
-                    className="object-cover w-full h-full grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
-                  />
-                </div>
-                <div className="absolute -bottom-6 -right-6 bg-[#CCFF00] text-black p-6 font-mono text-xs font-bold tracking-tight hidden sm:block max-w-xs shadow-2xl">
-                  BUILDING ROBUST BACKEND APIS & RESPONSIVE WEB INTERFACES.
-                </div>
-              </div>
-            </div>
 
-            <div className="lg:col-span-7">
-              <span className="text-[#CCFF00] font-mono text-xs uppercase tracking-widest mb-3 block">
-                ABOUT ACHUTA
-              </span>
-              <h2 className="text-4xl sm:text-6xl font-bold uppercase mb-6 leading-tight">
-                FULL STACK ENGINEERING <br />
-                <span className="border-text italic">WITH PYTHON & REACT</span>
-              </h2>
-
-              <p className="text-lg text-[#ccc] mb-6 leading-relaxed">
-                Hi, I'm <strong className="text-white">Achuta Kumar Gouda</strong>, a Web Developer based in Ameerpet, Hyderabad, India. I specialize in building backend services using <strong className="text-[#CCFF00]">Python, Django, Django REST Framework (DRF) and Flask</strong> alongside modern frontend interfaces in <strong className="text-[#CCFF00]">React.js</strong>.
-              </p>
-
-              <p className="text-[#888] mb-8 leading-relaxed">
-                My technical foundation includes designing secure RESTful APIs with JWT Authentication, managing MySQL and MongoDB databases, implementing MVT architecture, configuring CORS, and utilizing Linux, Git/GitHub, Postman, PyCharm, and Render for deployment.
-              </p>
-
-              {/* Bio Details Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 font-mono text-xs bg-[#161616] p-6 border border-[#222]">
-                <div className="flex flex-col gap-1">
-                  <span className="text-[#666] uppercase">Full Name</span>
-                  <span className="text-white font-bold">Achuta Kumar Gouda</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[#666] uppercase">Location</span>
-                  <span className="text-white font-bold">Ameerpet, Hyderabad, India</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[#666] uppercase">Primary Stack</span>
-                  <span className="text-[#CCFF00] font-bold">Python, Django, DRF, Flask, React.js</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[#666] uppercase">Databases & Tools</span>
-                  <span className="text-white font-bold">MySQL, MongoDB, Git, Render</span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-4">
-                <button
-                  onClick={handleResumeDownload}
-                  className="inline-flex items-center gap-3 bg-[#CCFF00] text-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:translate-x-1 transition-transform"
-                >
-                  <FileText className="w-4 h-4" /> Download Resume
-                </button>
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 border border-[#333] hover:border-[#CCFF00] text-[#ccc] hover:text-[#CCFF00] px-6 py-3 font-mono uppercase text-xs transition-colors"
-                >
-                  Contact Me <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Comprehensive Skills Section */}
         <section id="skills" className="px-6 md:px-16 py-24 bg-[#111111]">
@@ -398,7 +350,7 @@ const Portfolio = () => {
               TECHNICAL EXPERTISE
             </span>
             <h2 className="text-4xl md:text-6xl font-bold uppercase">
-              SKILLS & <span className="border-text italic">COMPETENCIES</span>
+              SKILLS & <span className="text-[#CCFF00] italic">COMPETENCIES</span>
             </h2>
           </div>
 
@@ -464,14 +416,14 @@ const Portfolio = () => {
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                className="group bg-[#161616] border border-[#222] hover:border-[#CCFF00]/50 transition-all duration-300 flex flex-col justify-between overflow-hidden"
+                className="group bg-[#161616] border border-[#222] hover:border-[#CCFF00]/40 transition-colors duration-300 flex flex-col justify-between overflow-hidden"
               >
                 <div>
                   <div className="relative aspect-video overflow-hidden">
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="object-cover w-full h-full grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-3 left-3 bg-[#131313]/80 backdrop-blur-md px-3 py-1 font-mono text-[10px] text-[#CCFF00] border border-[#CCFF00]/30 uppercase">
                       {project.category} • {project.year}
@@ -591,13 +543,33 @@ const Portfolio = () => {
                   </div>
                 </a>
 
+                <a href="https://github.com/AchutaKumar" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-white hover:text-[#CCFF00] transition-colors p-4 bg-[#161616] border border-[#222]">
+                  <div className="p-3 bg-[#CCFF00] text-black rounded">
+                    <GithubIcon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#666] uppercase block">GitHub</span>
+                    <span className="font-bold text-base">Achuta Kumar Gouda</span>
+                  </div>
+                </a>
+
+                <a href="https://www.linkedin.com/in/achuta-kumar/" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-white hover:text-[#CCFF00] transition-colors p-4 bg-[#161616] border border-[#222]">
+                  <div className="p-3 bg-[#CCFF00] text-black rounded">
+                    <ExternalLink className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#666] uppercase block">LinkedIn</span>
+                    <span className="font-bold text-base">Achuta Kumar Gouda</span>
+                  </div>
+                </a>
+
                 <div className="flex items-center gap-4 text-white p-4 bg-[#161616] border border-[#222]">
                   <div className="p-3 bg-[#CCFF00] text-black rounded">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="text-[10px] text-[#666] uppercase block">Location</span>
-                    <span className="font-bold text-base">Ameerpet, Hyderabad, India</span>
+                    <span className="font-bold text-base">Hyderabad, India</span>
                   </div>
                 </div>
               </div>
@@ -715,7 +687,7 @@ const Portfolio = () => {
               <div>
                 <h3 className="text-2xl font-bold uppercase text-white font-mono">Achuta Kumar Gouda</h3>
                 <p className="text-xs font-mono text-[#CCFF00]">Python, Django & React Developer</p>
-                <p className="text-[11px] text-[#888] font-mono">Ameerpet, Hyderabad, India • Mobile: +91 8917624469</p>
+                <p className="text-[11px] text-[#888] font-mono">Hyderabad, India • Mobile: +91 8917624469</p>
               </div>
             </div>
 
@@ -748,7 +720,7 @@ const Portfolio = () => {
                 <h4 className="font-mono text-xs text-[#CCFF00] uppercase tracking-widest mb-2 border-b border-[#262626] pb-1">Personal Details</h4>
                 <div className="bg-[#101010] p-4 border border-[#222] text-xs font-mono text-[#aaa] space-y-1">
                   <p><strong className="text-white">DOB:</strong> 19 / 08 / 2004</p>
-                  <p><strong className="text-white">Location:</strong> Ameerpet, Hyderabad, India</p>
+                  <p><strong className="text-white">Location:</strong> Hyderabad, India</p>
                   <p><strong className="text-white">Phone:</strong> +91 8917624469</p>
                 </div>
               </div>
@@ -774,7 +746,7 @@ const Portfolio = () => {
             <div className="text-2xl font-bold text-white uppercase tracking-tighter font-mono">
               ACHUTA<span className="text-[#CCFF00]">.DEV</span>
             </div>
-            <p className="text-xs text-[#666] font-mono mt-1">Python, Django & Full Stack Web Developer • Ameerpet, Hyderabad, India</p>
+            <p className="text-xs text-[#666] font-mono mt-1">Python, Django & Full Stack Web Developer • Hyderabad, India</p>
           </div>
 
           <nav className="flex flex-wrap gap-6 font-mono uppercase text-[#888] text-xs">
