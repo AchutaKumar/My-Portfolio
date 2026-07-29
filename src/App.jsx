@@ -3,7 +3,7 @@ import {
   ArrowUpRight, ArrowRight, ArrowUp, Code2, Rocket, Globe, Database,
   Terminal, Cpu, Mail, Phone, MapPin, ExternalLink, Download,
   FileText, Menu, X, MessageSquare, CheckCircle2,
-  Send
+  Send, Server
 } from 'lucide-react';
 import achutaPic from './assets/achuta.jpg';
 
