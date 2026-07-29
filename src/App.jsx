@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
   ArrowUpRight, ArrowRight, ArrowUp, Code2, Rocket, Globe, Database,
-  Terminal, Cpu, Sparkles, Mail, Phone, MapPin, ExternalLink, Download,
-  FileText, Menu, X, User, Briefcase, Layers, MessageSquare, CheckCircle2,
-  Send, Server, Shield, Network as NetworkIcon, GitBranch, Layout
+  Terminal, Cpu, Mail, Phone, MapPin, ExternalLink, Download,
+  FileText, Menu, X, MessageSquare, CheckCircle2,
+  Send
 } from 'lucide-react';
 import achutaPic from './assets/achuta.jpg';
 
@@ -18,11 +18,12 @@ const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    service: 'Python Full Stack Developer',
+    service: '',
     message: ''
   });
 
@@ -31,14 +32,40 @@ const Portfolio = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setFormData({ name: '', email: '', phone: '', service: 'Python Full Stack Developer', message: '' });
-    }, 4000);
+    setSubmitError('');
+
+    if (!formData.name || !formData.email || !formData.service || !formData.message) return;
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/achutakumargouda@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.service,
+          message: formData.message,
+          _subject: `New portfolio inquiry from ${formData.name}`
+        })
+      });
+
+      if (!response.ok) throw new Error('Unable to send message right now.');
+
+      setFormSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+      setTimeout(() => {
+        setFormSubmitted(false);
+      }, 5000);
+    } catch (error) {
+      console.error('Contact form submission failed:', error);
+      setSubmitError('Unable to send your message right now. Please try again later or email directly.');
+    }
   };
 
   const scrollToTop = (e) => {
@@ -274,13 +301,13 @@ const Portfolio = () => {
             <div className="lg:col-span-4 flex justify-center lg:justify-end">
               <div className="max-w-xs sm:max-w-sm w-full">
                 <div className="bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#262626] hover:border-[#3a3a3a] transition-all duration-300 hover:scale-[1.02]">
-                  <div className="aspect-[4/5] overflow-hidden relative">
+                  <div className="aspect-4/5 overflow-hidden relative">
                     <img
                       src={achutaPic}
                       alt="Achuta Kumar Gouda"
                       className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 p-5 flex flex-col justify-end">
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-90 p-5 flex flex-col justify-end">
                       <span className="text-[#CCFF00] font-mono text-[10px] uppercase tracking-widest">DEVELOPER PROFILE</span>
                       <h3 className="text-white font-bold text-lg">Achuta Kumar Gouda</h3>
                       <p className="text-[#aaa] text-xs font-mono">Python Full Stack Developer</p>
@@ -634,10 +661,12 @@ const Portfolio = () => {
                     <label className="font-mono text-[10px] uppercase text-[#888]">Inquiry Type</label>
                     <select
                       name="service"
+                      required
                       value={formData.service}
                       onChange={handleChange}
                       className="bg-[#101010] border border-[#2a2a2a] px-4 py-3 text-sm text-white focus:border-[#CCFF00] focus:outline-none transition-colors cursor-pointer"
                     >
+                      <option value="">Select inquiry type</option>
                       <option value="Python & Django Backend">Python & Django Backend</option>
                       <option value="Django REST Framework API">Django REST Framework API</option>
                       <option value="React.js Frontend UI">React.js Frontend UI</option>
@@ -657,6 +686,10 @@ const Portfolio = () => {
                       className="bg-[#101010] border border-[#2a2a2a] px-4 py-3 text-sm text-white focus:border-[#CCFF00] focus:outline-none transition-colors resize-none"
                     />
                   </div>
+
+                  {submitError && (
+                    <p className="text-sm text-red-400 font-mono">{submitError}</p>
+                  )}
 
                   <button
                     type="submit"
