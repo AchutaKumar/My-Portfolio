@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PerspectiveGrid from './components/PerspectiveGrid';
 import {
   ArrowUpRight, ArrowRight, ArrowUp, Code2, Rocket, Globe, Database,
   Terminal, Cpu, Mail, Phone, MapPin, ExternalLink, Download,
@@ -166,7 +167,11 @@ const Portfolio = () => {
   ];
 
   return (
-    <div className="bg-[#131313] text-[#e2e2e2] font-sans overflow-x-hidden selection:bg-[#CCFF00] selection:text-black min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#131313] text-[#e2e2e2] font-sans selection:bg-[#CCFF00] selection:text-black">
+      <div className="fixed inset-0 z-0 opacity-70">
+        <PerspectiveGrid className="h-full w-full" />
+      </div>
+      <div className="relative z-10">
 
       {/* Header Navigation */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 py-5 bg-[#131313]/90 border-b border-[#1A1A1A] backdrop-blur-md">
@@ -797,6 +802,7 @@ const Portfolio = () => {
           </button>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
