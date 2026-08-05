@@ -132,6 +132,17 @@ const Portfolio = () => {
       demoUrl: '#',
       githubUrl: 'https://github.com/AchutaKumar/Blog-Application'
     },
+    {
+      id: 4,
+      title: 'URL Shortener',
+      category: 'API & Backend',
+      year: '2026',
+      description: 'Full-stack URL dispatch platform built with Django and DTL, featuring REST API endpoints for link shortening and analytics, secure user authentication, custom short code resolution, and real-time click logging.',
+      tech: ['Python', 'Django', 'JWT', 'Django Rest Framework', 'MySQL', 'DTL', 'Render'],
+      image: 'img/url shortener.png',
+      demoUrl: '#',
+      githubUrl: 'https://github.com/AchutaKumar/Shortwire'
+    },
 
   ];
 
